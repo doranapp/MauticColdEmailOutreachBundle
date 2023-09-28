@@ -64,6 +64,11 @@ class SameSubjectFollowupSubscriber implements EventSubscriberInterface
         if (!$this->enabled || null === $this->campaign || null === $leadId = $this->getLeadId($event)) {
             return;
         }
+
+        if ($this->campaign->getCategory()->getTitle() === 'cold-email') {
+            return;
+        }
+
         $email = $this->getFirstSentEmailVariant($this->campaign, $leadId);
         if (null !== $email) {
             $event->setSubject('Re: '.$email->getSubject());
